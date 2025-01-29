@@ -2,8 +2,6 @@ _G.Reach = 0
 _G.KeyBindHigher = "z"
 _G.KeyBindLower = "x"
 _G.ReachOff = false -- 
-
-_G.Reach = math.clamp(_G.Reach, 0, 10)
  
 game:GetService"RunService".Stepped:Connect(function()
     if _G.ReachOff then return end
