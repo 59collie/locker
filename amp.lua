@@ -1,96 +1,87 @@
-local function executeScript()
-    local Watchdog = false
-    local UBlubble = false
-    local Kanti = false
-    local UAttack = false
-    local AntiX = false
-    local StorAnti = false
-    local Groundsv1 = false
-    local Groundsv2 = false
-    local Groundsv3 = false
-
-    local AllAntiCheats = true
-
-    local amp = 5
-    local players = game:GetService("Players")
-    local localPlayer = players.LocalPlayer
+-- Function to encapsulate and manage script functionality
+local function executeLudicrousLaughterScript()
+    local player = game.Players.LocalPlayer
     local keyDown = true
     local distance = 9
-    local showNotifications = true
+    local amp = 5
     local autoclicker = false
+    local showNotifications = true
 
-    game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
-        if input.KeyCode == Enum.KeyCode.Z and not gameProcessedEvent then
+    -- Function to manage input events
+    local function handleInput(input, gameProcessedEvent)
+        if gameProcessedEvent then return end
+
+        if input.KeyCode == Enum.KeyCode.Z then
             keyDown = not keyDown
             if showNotifications then
                 game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "Ludicrous Laughter V1";
-                    Text = "Toggled = " .. (keyDown and "On" or "Off");
+                    Title = "Ludicrous Laughter V1",
+                    Text = "Toggled = " .. (keyDown and "On" or "Off")
                 })
             end
-        elseif input.KeyCode == Enum.KeyCode.K and not gameProcessedEvent then
+        elseif input.KeyCode == Enum.KeyCode.K then
             amp = math.max(0, amp - 3)
             if showNotifications then
                 game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "Ludicrous Laughter V1";
-                    Text = "Amp = " .. amp;
+                    Title = "Ludicrous Laughter V1",
+                    Text = "Amp = " .. amp
                 })
             end
-        elseif input.KeyCode == Enum.KeyCode.J and not gameProcessedEvent then
+        elseif input.KeyCode == Enum.KeyCode.J then
             amp = amp + 3
             if showNotifications then
                 game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "Ludicrous Laughter V1";
-                    Text = "Amp = " .. amp;
+                    Title = "Ludicrous Laughter V1",
+                    Text = "Amp = " .. amp
                 })
             end
-        elseif input.KeyCode == Enum.KeyCode.Q and not gameProcessedEvent then
+        elseif input.KeyCode == Enum.KeyCode.Q then
             distance = distance + 1
             if showNotifications then
                 game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "Ludicrous Laughter V1";
-                    Text = "Distance = " .. distance;
+                    Title = "Ludicrous Laughter V1",
+                    Text = "Distance = " .. distance
                 })
             end
-        elseif input.KeyCode == Enum.KeyCode.E and not gameProcessedEvent then
+        elseif input.KeyCode == Enum.KeyCode.E then
             distance = math.max(0, distance - 1)
             if showNotifications then
                 game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "Ludicrous Laughter V1";
-                    Text = "Distance = " .. distance;
+                    Title = "Ludicrous Laughter V1",
+                    Text = "Distance = " .. distance
                 })
             end
-        elseif input.KeyCode == Enum.KeyCode.N and not gameProcessedEvent then
-            showNotifications = not showNotifications
-        elseif input.KeyCode == Enum.KeyCode.U and not gameProcessedEvent then
+        elseif input.KeyCode == Enum.KeyCode.U then
             autoclicker = not autoclicker
             if showNotifications then
                 game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "Ludicrous Laughter V1";
-                    Text = "Autoclicker = " .. (autoclicker and "On" or "Off");
+                    Title = "Ludicrous Laughter V1",
+                    Text = "Autoclicker = " .. (autoclicker and "On" or "Off")
                 })
             end
         end
-    end)
+    end
 
-    game:GetService("RunService").RenderStepped:Connect(function()
+    -- Function to manage the main loop
+    local function mainLoop()
         if keyDown then
-            local success, err = pcall(function()
+            pcall(function()
                 if autoclicker then
-                    local tool = localPlayer.Character:FindFirstChildOfClass("Tool")
-                    if tool then
-                        tool:Activate()
-                    end
+                    local tool = player.Character:FindFirstChildOfClass("Tool")
+                    if tool then tool:Activate() end
                 end
-                for _, v in pairs(players:GetPlayers()) do
-                    if v ~= localPlayer and v.Character and v.Character:FindFirstChild("Head") and (v.Character.Head.Position - localPlayer.Character.Head.Position).magnitude <= distance then
-                        for _, part in pairs(v.Character:GetChildren()) do
-                            if part:IsA("BasePart") then
-                                for _ = 1, amp do
-                                    local toolHandle = localPlayer.Character:FindFirstChildOfClass("Tool") and localPlayer.Character:FindFirstChildOfClass("Tool").Handle
-                                    if toolHandle then
-                                        firetouchinterest(toolHandle, part, 0)
-                                        firetouchinterest(toolHandle, part, 1)
+
+                for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                    if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("Head") then
+                        if (otherPlayer.Character.Head.Position - player.Character.Head.Position).Magnitude <= distance then
+                            for _, part in pairs(otherPlayer.Character:GetChildren()) do
+                                if part:IsA("BasePart") then
+                                    for _ = 1, amp do
+                                        local toolHandle = player.Character:FindFirstChildOfClass("Tool") and player.Character:FindFirstChildOfClass("Tool").Handle
+                                        if toolHandle then
+                                            firetouchinterest(toolHandle, part, 0)
+                                            firetouchinterest(toolHandle, part, 1)
+                                        end
                                     end
                                 end
                             end
@@ -98,12 +89,15 @@ local function executeScript()
                     end
                 end
             end)
-            if not success then
-                warn("Error in script execution: " .. err)
-            end
         end
-    end)
+    end
+
+    -- Connect input handling
+    game:GetService("UserInputService").InputBegan:Connect(handleInput)
+    -- Connect main loop
+    game:GetService("RunService").RenderStepped:Connect(mainLoop)
 end
 
 -- Connect this function to your button
--- yourButton.MouseButton1Click:Connect(executeScript)
+-- Replace `yourButton` with the actual button reference
+-- yourButton.MouseButton1Click:Connect(executeLudicrousLaughterScript)
