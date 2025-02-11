@@ -1,83 +1,109 @@
--- Encapsulate the script logic in a function
-local function executeCustomScript()
-    local player = game.Players.LocalPlayer
-    local reach = 0
-    local keyBindHigher = "z"
-    local keyBindLower = "x"
-    local reachOff = false
-    local autoClicker = true
+local function executeScript()
+    local Watchdog = false
+    local UBlubble = false
+    local Kanti = false
+    local UAttack = false
+    local AntiX = false
+    local StorAnti = false
+    local Groundsv1 = false
+    local Groundsv2 = false
+    local Groundsv3 = false
 
-    -- Manage reach functionality
-    game:GetService("RunService").Stepped:Connect(function()
-        if reachOff then return end
-        pcall(function()
-            local sword = player.Character:FindFirstChildOfClass("Tool") and player.Character:FindFirstChildOfClass("Tool").Handle
-            if sword then
-                for _, v in pairs(game.Players:GetPlayers()) do
-                    if v ~= player and v.Character:FindFirstChild("Left Arm") then
-                        if (player.Character.Torso.Position - v.Character.Torso.Position).Magnitude <= reach then
-                            for _, limb in ipairs({"Left Arm", "Left Leg"}) do
-                                local part = v.Character:FindFirstChild(limb)
-                                if part then
-                                    part:BreakJoints()
-                                    part.Transparency = 1
-                                    part.CanCollide = false
-                                    part.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(1, 0, -3.5)
+    local AllAntiCheats = true
+
+    local amp = 5
+    local players = game:GetService("Players")
+    local localPlayer = players.LocalPlayer
+    local keyDown = true
+    local distance = 9
+    local showNotifications = true
+    local autoclicker = false
+
+    game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
+        if input.KeyCode == Enum.KeyCode.Z and not gameProcessedEvent then
+            keyDown = not keyDown
+            if showNotifications then
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Ludicrous Laughter V1";
+                    Text = "Toggled = " .. (keyDown and "On" or "Off");
+                })
+            end
+        elseif input.KeyCode == Enum.KeyCode.K and not gameProcessedEvent then
+            amp = math.max(0, amp - 3)
+            if showNotifications then
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Ludicrous Laughter V1";
+                    Text = "Amp = " .. amp;
+                })
+            end
+        elseif input.KeyCode == Enum.KeyCode.J and not gameProcessedEvent then
+            amp = amp + 3
+            if showNotifications then
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Ludicrous Laughter V1";
+                    Text = "Amp = " .. amp;
+                })
+            end
+        elseif input.KeyCode == Enum.KeyCode.Q and not gameProcessedEvent then
+            distance = distance + 1
+            if showNotifications then
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Ludicrous Laughter V1";
+                    Text = "Distance = " .. distance;
+                })
+            end
+        elseif input.KeyCode == Enum.KeyCode.E and not gameProcessedEvent then
+            distance = math.max(0, distance - 1)
+            if showNotifications then
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Ludicrous Laughter V1";
+                    Text = "Distance = " .. distance;
+                })
+            end
+        elseif input.KeyCode == Enum.KeyCode.N and not gameProcessedEvent then
+            showNotifications = not showNotifications
+        elseif input.KeyCode == Enum.KeyCode.U and not gameProcessedEvent then
+            autoclicker = not autoclicker
+            if showNotifications then
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Ludicrous Laughter V1";
+                    Text = "Autoclicker = " .. (autoclicker and "On" or "Off");
+                })
+            end
+        end
+    end)
+
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if keyDown then
+            local success, err = pcall(function()
+                if autoclicker then
+                    local tool = localPlayer.Character:FindFirstChildOfClass("Tool")
+                    if tool then
+                        tool:Activate()
+                    end
+                end
+                for _, v in pairs(players:GetPlayers()) do
+                    if v ~= localPlayer and v.Character and v.Character:FindFirstChild("Head") and (v.Character.Head.Position - localPlayer.Character.Head.Position).magnitude <= distance then
+                        for _, part in pairs(v.Character:GetChildren()) do
+                            if part:IsA("BasePart") then
+                                for _ = 1, amp do
+                                    local toolHandle = localPlayer.Character:FindFirstChildOfClass("Tool") and localPlayer.Character:FindFirstChildOfClass("Tool").Handle
+                                    if toolHandle then
+                                        firetouchinterest(toolHandle, part, 0)
+                                        firetouchinterest(toolHandle, part, 1)
+                                    end
                                 end
                             end
                         end
                     end
                 end
-            end
-        end)
-    end)
-
-    -- Handle keybinds for reach adjustment
-    local mouse = player:GetMouse()
-    mouse.KeyDown:Connect(function(key)
-        if key == keyBindHigher then
-            reach = reach + 1
-            game.StarterGui:SetCore("SendNotification", {
-                Title = "Reach",
-                Text = "Reach set to " .. reach,
-                Icon = "",
-                Duration = 1
-            })
-        elseif key == keyBindLower then
-            reach = reach - 1
-            game.StarterGui:SetCore("SendNotification", {
-                Title = "Reach",
-                Text = "Reach set to " .. reach,
-                Icon = "",
-                Duration = 1
-            })
-        end
-    end)
-
-    -- Auto-clicker functionality
-    spawn(function()
-        while autoClicker do
-            wait()
-            pcall(function()
-                local sword = player.Character:FindFirstChildOfClass("Tool")
-                if sword then
-                    sword:Activate()
-                end
             end)
+            if not success then
+                warn("Error in script execution: " .. err)
+            end
         end
     end)
-
-    -- Destroy specific objects in ReplicatedStorage
-    for _, objectName in ipairs({"ClientAlert", "ServerAlert", "CheckAdmin", "WarnRemote"}) do
-        local object = game:GetService("ReplicatedStorage"):FindFirstChild(objectName)
-        if object then
-            object:Destroy()
-        end
-    end
 end
 
--- Call the function to execute the script logic
-executeCustomScript()
-
--- Optional: Connect this function to a button click if needed
--- yourButton.MouseButton1Click:Connect(executeCustomScript)
+-- Connect this function to your button
+-- yourButton.MouseButton1Click:Connect(executeScript)
