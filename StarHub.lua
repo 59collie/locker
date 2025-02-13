@@ -1,3 +1,5 @@
+local TweenService = game:GetService("TweenService")
+
 local screenGui = Instance.new("ScreenGui")
 screenGui.ResetOnSpawn = false
 
@@ -5,7 +7,7 @@ local gradientBorderFrame = Instance.new("Frame")
 local gradientBorderCorner = Instance.new("UICorner")
 local frame = Instance.new("Frame")
 local frameCorner = Instance.new("UICorner")
-local toggleButton = Instance.new("TextButton")
+local toggleButton = Instance.new("ImageButton")
 
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -51,18 +53,27 @@ frame.Parent = gradientBorderFrame
 frameCorner.CornerRadius = UDim.new(0.1, 0)
 frameCorner.Parent = frame
 
-toggleButton.Size = UDim2.new(0, 100, 0, 50)
+-- Setup for the ImageButton
+toggleButton.Size = UDim2.new(0, 50, 0, 50)
 toggleButton.Position = UDim2.new(0, 10, 1, -360)
-toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-toggleButton.Text = "Open Menu"
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.BackgroundTransparency = 1
+toggleButton.Image = "rbxassetid://6035078897" -- Replace with your open image asset ID
 toggleButton.Parent = screenGui
 
 local isOpen = false
 toggleButton.MouseButton1Click:Connect(function()
     isOpen = not isOpen
     gradientBorderFrame.Visible = isOpen
-    toggleButton.Text = isOpen and "Close Menu" or "Open Menu"
+    toggleButton.Image = isOpen and "rbxassetid://6035078897" or "rbxassetid://6035078897"
+
+    -- Tween animation for the button size
+    local expandTween = TweenService:Create(toggleButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0, 60, 0, 60)})
+    local shrinkTween = TweenService:Create(toggleButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(0, 50, 0, 50)})
+    
+    expandTween:Play()
+    expandTween.Completed:Connect(function()
+        shrinkTween:Play()
+    end)
 end)
 
 -- Page content container
@@ -105,6 +116,29 @@ end
 createPage("Home")
 createPage("Scripts")
 createPage("Settings")
+
+-- Add a TextLabel to the Settings page for ASCII art
+local settingsPage = pages["Settings"]
+
+local asciiArtLabel = Instance.new("TextLabel")
+asciiArtLabel.Size = UDim2.new(0.8, 0, 1, -20) -- Fill 80% width of the page
+asciiArtLabel.Position = UDim2.new(0.1, 0, 0, 10) -- Centered horizontally with a margin
+asciiArtLabel.BackgroundTransparency = 1
+asciiArtLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+asciiArtLabel.Font = Enum.Font.Code -- Code font is suitable for ASCII art
+asciiArtLabel.TextSize = 14 -- Adjust text size for better readability
+asciiArtLabel.TextXAlignment = Enum.TextXAlignment.Center -- Center text horizontally
+asciiArtLabel.TextYAlignment = Enum.TextYAlignment.Top
+asciiArtLabel.TextWrapped = true -- Allow wrapping for larger ASCII art
+asciiArtLabel.Text = [[
+
+   __|  |               |  |        |    
+ \__ \   _|   _` |   _| __ |  |  |   _ \ 
+ ____/ \__| \__,_| _|  _| _| \_,_| _.__/ 
+                                         
+                        
+]] -- Replace with your desired ASCII art
+asciiArtLabel.Parent = settingsPage
 
 -- Add image and text labels to the Home page
 local homePage = pages["Home"]
@@ -301,6 +335,15 @@ for _, page in ipairs(pageList) do
 
     button.MouseButton1Click:Connect(function()
         showPage(page.name)
+        
+        -- Tween animation for the button size
+        local expandTween = TweenService:Create(button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0, 35, 0, 35)})
+        local shrinkTween = TweenService:Create(button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(0, 30, 0, 30)})
+        
+        expandTween:Play()
+        expandTween.Completed:Connect(function()
+            shrinkTween:Play()
+        end)
     end)
 end
 
