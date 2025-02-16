@@ -2,8 +2,8 @@
 local function executeCustomScript()
     local player = game.Players.LocalPlayer
     local reach = 0
-    local keyBindHigher = "z"
-    local keyBindLower = "x"
+    local keyBindHigher = "="
+    local keyBindLower = "-"
     local reachOff = false
     local autoClicker = true
 
