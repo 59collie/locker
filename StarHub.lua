@@ -49,18 +49,9 @@ borderGradient.Color = ColorSequence.new({
 borderGradient.Rotation = 45
 borderGradient.Parent = gradientBorderFrame
 
--- Tween to animate the gradient rotation
-local tweenInfo = TweenInfo.new(
-    4, -- Duration in seconds
-    Enum.EasingStyle.Linear, -- Easing style
-    Enum.EasingDirection.InOut, -- Easing direction
-    -1, -- Repeat count (-1 for infinite)
-    false, -- Don't reverse
-    0 -- Delay time
-)
-
-local tween = TweenService:Create(borderGradient, tweenInfo, {Rotation = 405})
-tween:Play()
+-- Tween to animate the border gradient rotation
+local borderTween = TweenService:Create(borderGradient, TweenInfo.new(4, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, false, 0), {Rotation = 405})
+borderTween:Play()
 
 -- Main frame properties
 frame.Size = UDim2.new(0, frameWidth, 0, frameHeight)
@@ -140,7 +131,7 @@ createPage("Settings")
 local settingsPage = pages["Settings"]
 
 local asciiArtLabel = Instance.new("TextLabel")
-asciiArtLabel.Size = UDim2.new(0.8, 0, 1, -20)
+asciiArtLabel.Size = UDim2.new(0.8, 0, 0.5, -20)
 asciiArtLabel.Position = UDim2.new(0.1, 0, 0, 10)
 asciiArtLabel.BackgroundTransparency = 1
 asciiArtLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -157,6 +148,20 @@ asciiArtLabel.Text = [[
                                                                                                                  
 ]]
 asciiArtLabel.Parent = settingsPage
+
+-- Add a multi-line TextLabel for information
+local infoLabel = Instance.new("TextLabel")
+infoLabel.Size = UDim2.new(0.8, 0, 0.6, 0) -- Increase height
+infoLabel.Position = UDim2.new(0.1, 0, 0.5, 10) -- Adjusted position
+infoLabel.BackgroundTransparency = 1
+infoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+infoLabel.Font = Enum.Font.Gotham
+infoLabel.TextSize = 11 -- Decreased text size
+infoLabel.TextXAlignment = Enum.TextXAlignment.Left
+infoLabel.TextYAlignment = Enum.TextYAlignment.Top
+infoLabel.TextWrapped = true
+infoLabel.Text = "Made by 59Collie.\nReach keybinds:\n(=) Increase, (-) Decrease.\nAmp keybinds:\n(Z) Enabled,\n(Q) Increase Distance, (E) Decrease Distance.\n(J) Increase Amp, (K) Decrease Amp.\n(U) Autoclicker.\nTP/Destroy keybinds:\n(RightAlt)Toggle Menu,\n(MiddleClick) Toggle Event"
+infoLabel.Parent = settingsPage
 
 -- Add image and text labels to the Home page
 local homePage = pages["Home"]
