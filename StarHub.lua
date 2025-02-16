@@ -150,14 +150,11 @@ asciiArtLabel.TextXAlignment = Enum.TextXAlignment.Center
 asciiArtLabel.TextYAlignment = Enum.TextYAlignment.Top
 asciiArtLabel.TextWrapped = true
 asciiArtLabel.Text = [[
-.d88888b    dP                     dP     dP           dP       
-88.    "'   88                     88     88           88       
-`Y88888b. d8888P .d8888b. 88d888b. 88aaaaa88a dP    dP 88d888b. 
-      `8b   88   88'  `88 88'  `88 88     88  88    88 88'  `88 
-d8'   .8P   88   88.  .88 88       88     88  88.  .88 88.  .88 
- Y88888P    dP   `88888P8 dP       dP     dP  `88888P' 88Y8888' 
-                                                                
-                                                                                       
+   ______           __ __     __ 
+  / __/ /____ _____/ // /_ __/ / 
+ _\ \/ __/ _ `/ __/ _  / // / _ \
+/___/\__/\_,_/_/ /_//_/\_,_/_.__/
+                                                                                                                 
 ]]
 asciiArtLabel.Parent = settingsPage
 
