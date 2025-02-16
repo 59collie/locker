@@ -14,15 +14,21 @@ local playerGui = player:WaitForChild("PlayerGui")
 screenGui.Parent = playerGui
 
 -- Button and layout properties
-local buttonHeight = 40
 local buttonWidth = 400
 local separatorHeight = 1
 local buttonPadding = 5
-local numberOfButtons = 5
+local numberOfButtons = 6
 local padding = 10
 local sidebarSpacing = 50
+
+-- Calculate frameHeight
+local originalButtonHeight = 40
+local frameHeight = (originalButtonHeight + buttonPadding) * numberOfButtons + sidebarSpacing
+
+-- Adjust buttonHeight
+local buttonHeight = (frameHeight - sidebarSpacing) / numberOfButtons - buttonPadding
+
 local frameWidth = buttonWidth + 20
-local frameHeight = (buttonHeight + buttonPadding) * numberOfButtons + sidebarSpacing
 
 -- Gradient border frame properties
 gradientBorderFrame.Size = UDim2.new(0, frameWidth + 4, 0, frameHeight + 4)
@@ -43,6 +49,19 @@ borderGradient.Color = ColorSequence.new({
 borderGradient.Rotation = 45
 borderGradient.Parent = gradientBorderFrame
 
+-- Tween to animate the gradient rotation
+local tweenInfo = TweenInfo.new(
+    4, -- Duration in seconds
+    Enum.EasingStyle.Linear, -- Easing style
+    Enum.EasingDirection.InOut, -- Easing direction
+    -1, -- Repeat count (-1 for infinite)
+    false, -- Don't reverse
+    0 -- Delay time
+)
+
+local tween = TweenService:Create(borderGradient, tweenInfo, {Rotation = 405})
+tween:Play()
+
 -- Main frame properties
 frame.Size = UDim2.new(0, frameWidth, 0, frameHeight)
 frame.Position = UDim2.new(0, 2, 0, 2)
@@ -57,7 +76,7 @@ frameCorner.Parent = frame
 toggleButton.Size = UDim2.new(0, 50, 0, 50)
 toggleButton.Position = UDim2.new(0, 10, 1, -360)
 toggleButton.BackgroundTransparency = 1
-toggleButton.Image = "rbxassetid://6035078897" -- Replace with your open image asset ID
+toggleButton.Image = "rbxassetid://6035078897"
 toggleButton.Parent = screenGui
 
 local isOpen = false
@@ -121,15 +140,15 @@ createPage("Settings")
 local settingsPage = pages["Settings"]
 
 local asciiArtLabel = Instance.new("TextLabel")
-asciiArtLabel.Size = UDim2.new(0.8, 0, 1, -20) -- Fill 80% width of the page
-asciiArtLabel.Position = UDim2.new(0.1, 0, 0, 10) -- Centered horizontally with a margin
+asciiArtLabel.Size = UDim2.new(0.8, 0, 1, -20)
+asciiArtLabel.Position = UDim2.new(0.1, 0, 0, 10)
 asciiArtLabel.BackgroundTransparency = 1
 asciiArtLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-asciiArtLabel.Font = Enum.Font.Code -- Code font is suitable for ASCII art
-asciiArtLabel.TextSize = 14 -- Adjust text size for better readability
-asciiArtLabel.TextXAlignment = Enum.TextXAlignment.Center -- Center text horizontally
+asciiArtLabel.Font = Enum.Font.Code
+asciiArtLabel.TextSize = 14
+asciiArtLabel.TextXAlignment = Enum.TextXAlignment.Center
 asciiArtLabel.TextYAlignment = Enum.TextYAlignment.Top
-asciiArtLabel.TextWrapped = true -- Allow wrapping for larger ASCII art
+asciiArtLabel.TextWrapped = true
 asciiArtLabel.Text = [[
 
    __|  |               |  |        |    
@@ -137,7 +156,7 @@ asciiArtLabel.Text = [[
  ____/ \__| \__,_| _|  _| _| \_,_| _.__/ 
                                          
                         
-]] -- Replace with your desired ASCII art
+]]
 asciiArtLabel.Parent = settingsPage
 
 -- Add image and text labels to the Home page
@@ -148,7 +167,7 @@ local homeImage = Instance.new("ImageLabel")
 homeImage.Size = UDim2.new(0, 150, 0, 150)
 homeImage.Position = UDim2.new(1, -185, 0.5, -75)
 homeImage.AnchorPoint = Vector2.new(1, 0.5)
-homeImage.Image = "rbxassetid://6035078897" -- Replace with your image asset ID
+homeImage.Image = "rbxassetid://6035078897"
 homeImage.BackgroundTransparency = 1
 homeImage.Parent = homePage
 
@@ -166,17 +185,17 @@ homeTextLabel.Parent = homePage
 
 -- Additional text label, moved to the right side of the content frame
 local additionalTextLabel = Instance.new("TextLabel")
-additionalTextLabel.Size = UDim2.new(0, 100, 0, 20) -- Smaller size
-additionalTextLabel.Position = UDim2.new(1, -110, 0, 10) -- Positioned on the right side
+additionalTextLabel.Size = UDim2.new(0, 100, 0, 20)
+additionalTextLabel.Position = UDim2.new(1, -110, 0, 10)
 additionalTextLabel.AnchorPoint = Vector2.new(0, 0)
 additionalTextLabel.BackgroundTransparency = 1
-additionalTextLabel.Text = "Version 1.0"
+additionalTextLabel.Text = "Version 1.1"
 additionalTextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 additionalTextLabel.Font = Enum.Font.SciFi
-additionalTextLabel.TextSize = 12 -- Smaller text size
+additionalTextLabel.TextSize = 12
 additionalTextLabel.BorderSizePixel = 0
-additionalTextLabel.Visible = false -- Initially hidden
-additionalTextLabel.Parent = contentFrame -- Parent changed to contentFrame
+additionalTextLabel.Visible = false
+additionalTextLabel.Parent = contentFrame
 
 -- Apply gradient to the additional text label
 local textGradient = Instance.new("UIGradient")
@@ -192,18 +211,18 @@ local function showPage(pageName)
     for name, page in pairs(pages) do
         page.Visible = (name == pageName)
     end
-    -- Show the additional text label only on the Home page
     additionalTextLabel.Visible = (pageName == "Home")
 end
 showPage("Home")
 
 -- Scripts page content
 local scripts = {
-    {name = "cbringAC", code = "https://raw.githubusercontent.com/59collie/locker/main/Reach.lua"},
-    {name = "cbring", code = "https://raw.githubusercontent.com/59collie/locker/main/ReachNOAC.lua"},
-    {name = "Ludicrous Amp", code = "https://raw.githubusercontent.com/59collie/locker/main/LLV1.lua"},
+    {name = "Reach + AC", code = "https://raw.githubusercontent.com/59collie/locker/main/Reach.lua"},
+    {name = "Reach", code = "https://raw.githubusercontent.com/59collie/locker/main/ReachNOAC.lua"},
+    {name = "Damage Amplification", code = "https://raw.githubusercontent.com/59collie/locker/main/LLV1.lua"},
     {name = "ESP", code = "https://raw.githubusercontent.com/59collie/locker/main/sfesp.lua"},
-    {name = "Autoclicker", code = "https://raw.githubusercontent.com/59collie/locker/main/ac.lua"}
+    {name = "Autoclicker", code = "https://raw.githubusercontent.com/59collie/locker/main/ac.lua"},
+    {name = "TP/Destroy", code = "https://raw.githubusercontent.com/LxckStxp/Utility-Modules/main/ClickUtility.lua"}
 }
 
 local totalButtonHeight = (buttonHeight + buttonPadding) * #scripts - buttonPadding
@@ -211,8 +230,7 @@ local totalButtonHeight = (buttonHeight + buttonPadding) * #scripts - buttonPadd
 for index, script in ipairs(scripts) do
     local button = Instance.new("TextButton")
     local buttonCorner = Instance.new("UICorner")
-    local statusLight = Instance.new("Frame")
-    local lightCorner = Instance.new("UICorner")
+    local statusIcon = Instance.new("ImageLabel")
 
     button.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
     button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -227,28 +245,13 @@ for index, script in ipairs(scripts) do
     buttonCorner.CornerRadius = UDim.new(0, 8)
     buttonCorner.Parent = button
 
-    statusLight.Size = UDim2.new(0, 20, 0, 20)
-    statusLight.Position = UDim2.new(1, -10, 0.5, 0)
-    statusLight.AnchorPoint = Vector2.new(1, 0.5)
-    statusLight.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    statusLight.BorderSizePixel = 0
-    statusLight.Parent = button
-
-    lightCorner.CornerRadius = UDim.new(1, 0)
-    lightCorner.Parent = statusLight
-
-    -- Add a gradient outline to the status light
-    local statusStroke = Instance.new("UIStroke")
-    statusStroke.Thickness = 2 -- Thin outline
-    statusStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    statusStroke.Parent = statusLight
-
-    local strokeGradient = Instance.new("UIGradient")
-    strokeGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0.0, Color3.fromRGB(0, 0, 255)),
-        ColorSequenceKeypoint.new(1.0, Color3.fromRGB(128, 0, 128))
-    })
-    strokeGradient.Parent = statusStroke
+    -- Increase the size of the status icon
+    statusIcon.Size = UDim2.new(0, 30, 0, 30) -- Adjusted size
+    statusIcon.Position = UDim2.new(1, -15, 0.5, 0) -- Adjusted position
+    statusIcon.AnchorPoint = Vector2.new(1, 0.5)
+    statusIcon.Image = "rbxassetid://11896855899" -- Replace with your "off" image asset ID
+    statusIcon.BackgroundTransparency = 1
+    statusIcon.Parent = button
 
     local isEnabled = false
     button.MouseButton1Click:Connect(function()
@@ -266,7 +269,7 @@ for index, script in ipairs(scripts) do
             end)
             if success then
                 isEnabled = true
-                statusLight.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                statusIcon.Image = "rbxassetid://11896842923" -- Replace with your "on" image asset ID
             else
                 warn("Error executing " .. script.name .. ": " .. result)
             end
@@ -280,7 +283,6 @@ scriptSeparator.Size = UDim2.new(1, -20, 0, separatorHeight)
 scriptSeparator.Position = UDim2.new(0, 10, 0, totalButtonHeight + 10)
 scriptSeparator.BackgroundColor3 = Color3.fromRGB(169, 169, 169)
 scriptSeparator.BorderSizePixel = 0
-scriptSeparator.ZIndex = 10
 scriptSeparator.Parent = frame
 
 -- Add a gradient to the separator
@@ -294,9 +296,10 @@ separatorGradient.Parent = scriptSeparator
 
 -- Page selector buttons positioned under the script buttons
 local pageSelectorContainer = Instance.new("Frame")
-pageSelectorContainer.Size = UDim2.new(1, -160, 0, 40) -- Adjusted size for buttons
+pageSelectorContainer.Size = UDim2.new(1, -160, 0, 40)
 pageSelectorContainer.Position = UDim2.new(0, 10, 1, -43)
 pageSelectorContainer.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+pageSelectorContainer.BackgroundTransparency = 1
 pageSelectorContainer.BorderSizePixel = 0
 pageSelectorContainer.Parent = frame
 
@@ -349,15 +352,15 @@ end
 
 -- Create a separate container for the sidebar image and text
 local sidebarContent = Instance.new("Frame")
-sidebarContent.Size = UDim2.new(0, 160, 0, 40) -- Original size
-sidebarContent.Position = UDim2.new(1, -160, 1, -43) -- Original position
+sidebarContent.Size = UDim2.new(0, 160, 0, 40)
+sidebarContent.Position = UDim2.new(1, -160, 1, -43)
 sidebarContent.BackgroundTransparency = 1
 sidebarContent.Parent = frame
 
 -- Sidebar text label
 local sidebarText = Instance.new("TextLabel")
 sidebarText.Size = UDim2.new(0, 100, 0, 30)
-sidebarText.Position = UDim2.new(0, 40, 0.5, 0) -- Original position
+sidebarText.Position = UDim2.new(0, 40, 0.5, 0)
 sidebarText.AnchorPoint = Vector2.new(0, 0.5)
 sidebarText.BackgroundTransparency = 1
 sidebarText.Text = "StarHub"
@@ -378,8 +381,8 @@ sidebarTextGradient.Parent = sidebarText
 
 local sidebarImage = Instance.new("ImageLabel")
 sidebarImage.Size = UDim2.new(0, 30, 0, 30)
-sidebarImage.Position = UDim2.new(1, -7, 0.5, 0) -- Original position
+sidebarImage.Position = UDim2.new(1, -7, 0.5, 0)
 sidebarImage.AnchorPoint = Vector2.new(1, 0.5)
-sidebarImage.Image = "rbxassetid://6035078897" -- Replace with your image asset ID
+sidebarImage.Image = "rbxassetid://6035078897"
 sidebarImage.BackgroundTransparency = 1
 sidebarImage.Parent = sidebarContent
