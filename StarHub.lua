@@ -223,7 +223,7 @@ showPage("Home")
 local scripts = {
     {name = "Reach + AC", code = "https://raw.githubusercontent.com/59collie/locker/main/Reach.lua"},
     {name = "Reach", code = "https://raw.githubusercontent.com/59collie/locker/main/ReachNOAC.lua"},
-    {name = "Damage Amplification", code = "https://raw.githubusercontent.com/59collie/locker/main/LLV1.lua"},
+    {name = "Vulcan Amp", code = "https://raw.githubusercontent.com/59collie/locker/main/vulcan.lua"},
     {name = "ESP", code = "https://raw.githubusercontent.com/59collie/locker/main/sfesp.lua"},
     {name = "Autoclicker", code = "https://raw.githubusercontent.com/59collie/locker/main/ac.lua"},
     {name = "TP/Destroy", code = "https://raw.githubusercontent.com/LxckStxp/Utility-Modules/main/ClickUtility.lua"}
